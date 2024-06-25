@@ -22,6 +22,8 @@ export const handleGuess = async (
 		.join('')
 		.toLowerCase();
 
+	console.log('Current Guess:', guess);
+
 	const isValid = await validateGuess(guess);
 	if (!isValid) return;
 
@@ -39,6 +41,8 @@ export const handleGuess = async (
 		setGuesses,
 		setLetterColors,
 	);
+
+	console.log('Updated Guesses:', newGuesses);
 
 	setGuesses(newGuesses);
 	setLetterColors(prevColors => ({...prevColors, ...newLetterColors}));
@@ -65,9 +69,11 @@ export const handleGuess = async (
 		}
 
 		let userGuesses = data[0]?.guess || [];
-		userGuesses = [...userGuesses, newGuesses[currentRow]];
+		userGuesses[currentRow] = newGuesses[currentRow];
 
-		await supabase.from('user_guesses').upsert(
+		console.log('User Guesses to be upserted:', userGuesses);
+
+		const {error: upsertError} = await supabase.from('user_guesses').upsert(
 			{
 				user_id: userId,
 				date: new Date().toISOString().split('T')[0],
@@ -76,6 +82,12 @@ export const handleGuess = async (
 			},
 			{onConflict: ['user_id', 'date']},
 		);
+
+		if (upsertError) {
+			throw upsertError;
+		}
+
+		console.log('Guesses upserted successfully');
 	} catch (error: any) {
 		console.error('Error saving user guesses:', error.message || error);
 	}

@@ -19,8 +19,6 @@ export const getSupabaseClient = () => {
   const state = store.getState();
   const token = state.auth.token;
 
-  console.log('Token:', token); // Log the token to verify
-
   if (token) {
     supabase.auth.setSession(token.access_token, token.refresh_token);
   }

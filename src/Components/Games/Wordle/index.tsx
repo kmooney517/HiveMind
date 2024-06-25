@@ -51,7 +51,7 @@ const Wordle = (): React.JSX.Element => {
 			fetchUserGuesses(
 				new Date().toISOString().split('T')[0],
 				userId,
-			).then(({combinedData, currentUserHasGuessed}) => {
+			).then(({combinedData, currentUserHasGuessed, todayCompleted}) => {
 				if (currentUserHasGuessed) {
 					const formattedGuesses =
 						combinedData.find(guess => guess.user_id === userId)

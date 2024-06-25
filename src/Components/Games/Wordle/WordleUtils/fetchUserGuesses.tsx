@@ -16,26 +16,12 @@ export const fetchUserGuesses = async (
 			throw guessesError;
 		}
 
+		let todayCompleted = false;
+
 		// Check if the current user has submitted a guess for the selected date
 		const currentUserGuess = guessesData.some(
 			(guess: any) => guess.user_id === currentUser,
 		);
-
-		// Fetch user profiles based on user_ids from the guesses
-		const userIds = guessesData.map((guess: any) => guess.user_id);
-		const {data: profilesData, error: profilesError} = await supabase
-			.from('profiles')
-			.select('id, email')
-			.in('id', userIds);
-
-		if (profilesError) {
-			throw profilesError;
-		}
-
-		const userEmailMap = profilesData.reduce((acc: any, profile: any) => {
-			acc[profile.id] = profile.email;
-			return acc;
-		}, {});
 
 		const combinedData = guessesData.map((guess: any) => {
 			const formattedGuesses = guess.guess.map((row: any) => {
@@ -56,9 +42,20 @@ export const fetchUserGuesses = async (
 				);
 			}
 
+			const rowsWithGuesses = formattedGuesses.filter(row =>
+				row.some(cell => cell.letter !== ''),
+			);
+
+			// Check if the last row with a guess is all green
+			const lastRow = rowsWithGuesses[rowsWithGuesses.length - 1];
+			const allGreen =
+				lastRow && lastRow.every(cell => cell.color === 'green');
+			const maxGuessesReached = rowsWithGuesses.length >= 6;
+
+			todayCompleted = allGreen || maxGuessesReached;
+
 			return {
 				...guess,
-				email: userEmailMap[guess.user_id],
 				guess: formattedGuesses,
 				guessesTaken: formattedGuesses.filter((row: any) =>
 					row.some((cell: any) => cell.letter !== ''),
@@ -67,9 +64,17 @@ export const fetchUserGuesses = async (
 			};
 		});
 
-		return {combinedData, currentUserHasGuessed: currentUserGuess};
+		return {
+			combinedData,
+			currentUserHasGuessed: currentUserGuess,
+			todayCompleted,
+		};
 	} catch (error) {
 		console.error('Error fetching user guesses:', error.message || error);
-		return {combinedData: [], currentUserHasGuessed: false};
+		return {
+			combinedData: [],
+			currentUserHasGuessed: false,
+			todayCompleted: false,
+		};
 	}
 };

@@ -17,6 +17,16 @@ export const handleKeyPress = (
 	inputs: React.MutableRefObject<Array<Array<React.RefObject<any>>>>,
 	userId: string | null,
 ) => {
+	// Check if the last guess was all green or if the user has already made six guesses
+	const lastGuess = guesses[currentRow - 1];
+	const allGreen =
+		lastGuess && lastGuess.every(cell => cell.color === 'green');
+	const maxGuessesReached = currentRow >= 6;
+
+	if (allGreen || maxGuessesReached) {
+		return; // Disable all keypresses
+	}
+
 	if (key === 'BACKSPACE') {
 		const newGuesses = [...guesses];
 		for (let col = 4; col >= 0; col--) {

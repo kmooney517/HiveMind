@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {getSupabaseClient, setSupabaseAuthSession} from '@supabaseClient';
 import {setUser} from '@redux/authSlice';
+import {setHive} from '@redux/hiveSlice';
 
 import {
 	Container,
@@ -48,6 +49,24 @@ const AuthScreen: React.FC = () => {
 					},
 				}),
 			);
+
+			// Fetch the hive information
+			const {data: hiveData, error: hiveError} = await supabase
+				.from('hive_memberships')
+				.select('hive_id, hives(name)')
+				.eq('user_id', user.id);
+
+			if (hiveError) {
+				throw hiveError;
+			}
+
+			if (hiveData.length > 0) {
+				const hive = hiveData[0];
+				dispatch(setHive({id: hive.hive_id, name: hive.hives.name}));
+			} else {
+				dispatch(setHive({id: null, name: null}));
+			}
+
 			navigation.navigate('Home');
 		} catch (error: any) {
 			Alert.alert(

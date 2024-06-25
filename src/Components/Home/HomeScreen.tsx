@@ -19,13 +19,16 @@ const HomeScreen = ({navigation}) => {
 	useEffect(() => {
 		const loadGuesses = async () => {
 			setLoading(true);
-			const {currentUserHasGuessed} = await fetchUserGuesses(
-				new Date().toISOString().split('T')[0],
-				user?.id,
-			);
-			setCurrentUserHasGuessed(currentUserHasGuessed);
+			const {currentUserHasGuessed, todayCompleted} =
+				await fetchUserGuesses(
+					new Date().toISOString().split('T')[0],
+					user?.id,
+				);
+			setCurrentUserHasGuessed(todayCompleted);
 			setLoading(false);
 		};
+
+		console.log('hello');
 
 		loadGuesses();
 	}, [user]);

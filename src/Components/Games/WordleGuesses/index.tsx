@@ -36,13 +36,10 @@ const WordleGuesses: React.FC = () => {
 
 	const loadGuesses = async (selectedDate: string) => {
 		setLoading(true);
-		const {combinedData, currentUserHasGuessed} = await fetchUserGuesses(
-			selectedDate,
-			currentUser,
-			hive.id,
-		);
+		const {combinedData, currentUserHasGuessed, todayCompleted} =
+			await fetchUserGuesses(selectedDate, currentUser, hive.id);
 		setGuesses(combinedData);
-		setCurrentUserHasGuessed(currentUserHasGuessed);
+		setCurrentUserHasGuessed(todayCompleted);
 		setLoading(false);
 	};
 
@@ -86,7 +83,7 @@ const WordleGuesses: React.FC = () => {
 											<GridWrapper
 												key={userGuess.user_id}>
 												<UserText>
-													{userGuess.email}
+													{userGuess.user_id}
 												</UserText>
 												<Grid
 													guesses={userGuess.guess}
