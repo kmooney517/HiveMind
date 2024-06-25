@@ -36,13 +36,10 @@ const WordleGuesses: React.FC = () => {
 
 	const loadGuesses = async (selectedDate: string) => {
 		setLoading(true);
-		const {combinedData, _todayCompleted} = await fetchUserGuesses(
-			selectedDate,
-			currentUser,
-			hive.id,
-		);
+		const {combinedData, currentUserHasGuessed, todayCompleted} =
+			await fetchUserGuesses(selectedDate, currentUser, hive.id);
 		setGuesses(combinedData);
-		setCurrentUserHasGuessed(_todayCompleted);
+		setCurrentUserHasGuessed(todayCompleted);
 		setLoading(false);
 	};
 

@@ -19,15 +19,20 @@ const HomeScreen = ({navigation}) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.auth.user);
 	const hive = useSelector((state: RootState) => state.hive);
-
+	const [currentUserHasGuessed, setCurrentUserHasGuessed] =
+		useState<boolean>(false);
 	const [todayCompleted, setTodayCompleted] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const loadGuesses = useCallback(async () => {
-		const {_todayCompleted} = await fetchUserGuesses(
+		setLoading(true);
+		const {currentUserHasGuessed, todayCompleted} = await fetchUserGuesses(
 			new Date().toISOString().split('T')[0],
 			user?.id,
 		);
-		setTodayCompleted(_todayCompleted);
+		setCurrentUserHasGuessed(currentUserHasGuessed);
+		setTodayCompleted(todayCompleted);
+		setLoading(false);
 	}, [user?.id]);
 
 	useFocusEffect(

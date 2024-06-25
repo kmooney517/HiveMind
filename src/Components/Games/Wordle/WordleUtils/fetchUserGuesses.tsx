@@ -93,15 +93,15 @@ export const fetchUserGuesses = async (
 
 		return {
 			combinedData,
-			_currentUserHasGuessed: currentUserGuess,
-			_todayCompleted: todayCompleted,
+			currentUserHasGuessed: currentUserGuess,
+			todayCompleted,
 		};
 	} catch (error) {
 		console.error('Error fetching user guesses:', error.message || error);
 		return {
 			combinedData: [],
-			_currentUserHasGuessed: false,
-			_todayCompleted: false,
+			currentUserHasGuessed: false,
+			todayCompleted: false,
 		};
 	}
 };
