@@ -1,6 +1,6 @@
 module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
-  plugins: [
+	presets: ['module:metro-react-native-babel-preset'],
+	plugins: [
 		[
 			'module-resolver',
 			{
@@ -15,11 +15,11 @@ module.exports = {
 					'@home': './src/Components/Home',
 					'@hive': './src/Components/Hive',
 					'@wordle': './src/Components/Games/Wordle',
-					'@supabaseClient': './supabaseClient'
+					'@supabaseClient': './supabaseClient',
 				},
 			},
 		],
 		'react-native-reanimated/plugin',
-		'babel-plugin-styled-components'
+		'babel-plugin-styled-components',
 	],
 };

@@ -25,7 +25,9 @@ export const handleGuess = async (
 	console.log('Current Guess:', guess);
 
 	const isValid = await validateGuess(guess);
-	if (!isValid) return;
+	if (!isValid) {
+		return;
+	}
 
 	if (guess.length < 5) {
 		Alert.alert('Not enough letters');

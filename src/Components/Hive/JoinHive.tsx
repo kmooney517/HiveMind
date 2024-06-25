@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, Alert, ScrollView, Text } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Button, Alert, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@redux/store';
-import { fetchHiveMembers, leaveHive } from './fetchHiveMembers';
-import { setHive, clearHive } from '@redux/hiveSlice';
-import { getSupabaseClient } from '@supabaseClient';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '@redux/store';
+import {fetchHiveMembers, leaveHive} from './fetchHiveMembers';
+import {setHive, clearHive} from '@redux/hiveSlice';
+import {getSupabaseClient} from '@supabaseClient';
 
 const JoinHive: React.FC = () => {
 	const [hiveName, setHiveName] = useState<string>('');
@@ -23,7 +23,7 @@ const JoinHive: React.FC = () => {
 
 	const supabase = getSupabaseClient();
 
-	const fetchMembers = async (hiveId: string) => {
+	const fetchMembers = async () => {
 		try {
 			const members = await fetchHiveMembers(hiveId);
 			setHiveMembers(members);
@@ -44,7 +44,7 @@ const JoinHive: React.FC = () => {
 
 		try {
 			// Check if the hive already exists
-			const { data: hiveData, error: hiveError } = await supabase
+			const {data: hiveData, error: hiveError} = await supabase
 				.from('hives')
 				.select('id, name')
 				.eq('name', hiveName);
@@ -53,35 +53,33 @@ const JoinHive: React.FC = () => {
 				throw hiveError;
 			}
 
-			let hiveId = hiveData[0]?.id;
 			let hiveNameFetched = hiveData[0]?.name;
 
 			if (!hiveId) {
 				// Create a new hive if it doesn't exist
-				const { data: newHiveData, error: newHiveError } = await supabase
+				const {data: newHiveData, error: newHiveError} = await supabase
 					.from('hives')
-					.insert([{ name: hiveName }])
+					.insert([{name: hiveName}])
 					.select('id, name');
 
 				if (newHiveError) {
 					throw newHiveError;
 				}
 
-				hiveId = newHiveData[0]?.id;
 				hiveNameFetched = newHiveData[0]?.name;
 			}
 
 			// Join the hive
-			const { error: membershipError } = await supabase
+			const {error: membershipError} = await supabase
 				.from('hive_memberships')
-				.insert([{ user_id: userId, hive_id: hiveId }]);
+				.insert([{user_id: userId, hive_id: hiveId}]);
 
 			if (membershipError) {
 				throw membershipError;
 			}
 
-			dispatch(setHive({ id: hiveId, name: hiveNameFetched }));
-			await fetchMembers(hiveId);
+			dispatch(setHive({id: hiveId, name: hiveNameFetched}));
+			await fetchMembers();
 			Alert.alert('Successfully joined the hive!');
 		} catch (error: any) {
 			console.error('Error joining hive:', error.message || error);

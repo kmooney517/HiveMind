@@ -17,10 +17,20 @@ const AppNavigator = (): React.JSX.Element => {
 
 	return (
 		<NavigationContainer>
-			<Stack.Navigator screenOptions={{animation: 'none'}}>
+			<Stack.Navigator
+				screenOptions={{
+					animation: 'none',
+					headerStyle: {
+						backgroundColor: '#b0c4de', // Set your desired header color here
+					},
+				}}>
 				{user ? (
 					<>
-						<Stack.Screen name="Home" component={HomeScreen} />
+						<Stack.Screen
+							options={{headerShown: false}}
+							name="Home"
+							component={HomeScreen}
+						/>
 						<Stack.Screen name="Wordle" component={Wordle} />
 						<Stack.Screen
 							name="WordleGuesses"
@@ -36,7 +46,11 @@ const AppNavigator = (): React.JSX.Element => {
 					</>
 				) : (
 					<>
-						<Stack.Screen name="Auth" component={AuthScreen} />
+						<Stack.Screen
+							options={{headerShown: false}}
+							name="Auth"
+							component={AuthScreen}
+						/>
 					</>
 				)}
 			</Stack.Navigator>

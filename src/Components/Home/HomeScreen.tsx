@@ -1,37 +1,39 @@
 // src/Games/HomeScreen.tsx
-import React, { useEffect, useState, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button as RNButton } from 'react-native';
-import { fetchUserGuesses } from '@wordle/WordleUtils/fetchUserGuesses';
-import { Container, Header, WelcomeText } from './StyledHome';
-import styled from 'styled-components/native';
-import { signOut } from '@redux/authSlice';
-import { RootState } from '@redux/store';
+import React, {useState, useCallback} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchUserGuesses} from '@wordle/WordleUtils/fetchUserGuesses';
+import {
+	Container,
+	Header,
+	WelcomeText,
+	ButtonRow,
+	Button,
+	ButtonText,
+	LogoutButton,
+} from './StyledHome';
+import {signOut} from '@redux/authSlice';
+import {RootState} from '@redux/store';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({navigation}) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.auth.user);
 	const hive = useSelector((state: RootState) => state.hive);
-	const [currentUserHasGuessed, setCurrentUserHasGuessed] = useState<boolean>(false);
+
 	const [todayCompleted, setTodayCompleted] = useState<boolean>(false);
-	const [loading, setLoading] = useState<boolean>(true);
 
 	const loadGuesses = useCallback(async () => {
-		setLoading(true);
-		const { currentUserHasGuessed, todayCompleted } = await fetchUserGuesses(
+		const {_todayCompleted} = await fetchUserGuesses(
 			new Date().toISOString().split('T')[0],
-			user?.id
+			user?.id,
 		);
-		setCurrentUserHasGuessed(currentUserHasGuessed);
-		setTodayCompleted(todayCompleted);
-		setLoading(false);
+		setTodayCompleted(_todayCompleted);
 	}, [user?.id]);
 
 	useFocusEffect(
 		useCallback(() => {
 			loadGuesses();
-		}, [loadGuesses])
+		}, [loadGuesses]),
 	);
 
 	const handleSignOut = () => {
@@ -42,55 +44,38 @@ const HomeScreen = ({ navigation }) => {
 		<Container>
 			<Header>
 				<WelcomeText>Welcome, {user?.email}!</WelcomeText>
-				<RNButton title="Log Out" onPress={handleSignOut} />
+				<LogoutButton onPress={handleSignOut} bgColor="#f44336">
+					<ButtonText color="#fff">Log Out</ButtonText>
+				</LogoutButton>
 			</Header>
 			<ButtonRow>
-				<Button onPress={() => navigation.navigate('JoinHive')}>
-					<ButtonText>
+				<Button
+					onPress={() => navigation.navigate('JoinHive')}
+					bgColor="#000">
+					<ButtonText color="#ffcc00">
 						{hive.id ? 'View Hive Details' : 'Join or Create Hive'}
 					</ButtonText>
 				</Button>
 				<Button
 					onPress={() => navigation.navigate('Wordle')}
 					disabled={!hive.id}
-					style={{ backgroundColor: hive.id ? '#007AFF' : '#B0C4DE' }}
-				>
-					<ButtonText>Play Wordle</ButtonText>
+					bgColor={hive.id ? '#ffcc00' : '#B0C4DE'}>
+					<ButtonText color={hive.id ? '#000' : '#fff'}>
+						Play Wordle
+					</ButtonText>
 				</Button>
 				<Button
 					onPress={() => navigation.navigate('WordleGuesses')}
 					disabled={!hive.id || !todayCompleted}
-					style={{
-						backgroundColor: hive.id && todayCompleted ? '#007AFF' : '#B0C4DE',
-					}}
-				>
-					<ButtonText>View Today’s Scores</ButtonText>
+					bgColor={hive.id && todayCompleted ? '#ffcc00' : '#B0C4DE'}>
+					<ButtonText
+						color={hive.id && todayCompleted ? '#000' : '#fff'}>
+						View Today’s Scores
+					</ButtonText>
 				</Button>
 			</ButtonRow>
 		</Container>
 	);
 };
-
-const ButtonRow = styled.View`
-	flex-direction: row;
-	justify-content: space-around;
-	width: 100%;
-	padding: 16px;
-`;
-
-const Button = styled.TouchableOpacity`
-	background-color: #007aff;
-	padding: 20px;
-	margin: 5px;
-	border-radius: 10px;
-	align-items: center;
-	flex: 1;
-`;
-
-const ButtonText = styled.Text`
-	color: #ffffff;
-	font-size: 16px;
-	font-weight: bold;
-`;
 
 export default HomeScreen;

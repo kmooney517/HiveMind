@@ -1,14 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
-import {SafeAreaView, Alert, Dimensions} from 'react-native';
+import {Dimensions} from 'react-native';
 import WordleGrid from './WordleGrid';
 import WordleKeyboard from './WordleKeyboard';
-import {
-	fetchUserGuesses,
-	fetchSolution,
-	handleGuess,
-	handleKeyPress,
-} from './WordleUtils';
+import {fetchUserGuesses, fetchSolution, handleKeyPress} from './WordleUtils';
 import {RootState} from '@redux/store';
 
 import {
@@ -51,7 +46,7 @@ const Wordle = (): React.JSX.Element => {
 			fetchUserGuesses(
 				new Date().toISOString().split('T')[0],
 				userId,
-			).then(({combinedData, currentUserHasGuessed, todayCompleted}) => {
+			).then(({combinedData, currentUserHasGuessed}) => {
 				if (currentUserHasGuessed) {
 					const formattedGuesses =
 						combinedData.find(guess => guess.user_id === userId)
@@ -61,32 +56,22 @@ const Wordle = (): React.JSX.Element => {
 						formattedGuesses.filter((row: any) => row.length > 0)
 							.length,
 					);
-					const letterColors = formattedGuesses.reduce((acc, row) => {
-						row.forEach(({letter, color}) => {
-							if (letter && color !== 'white') {
-								acc[letter] = color;
-							}
-						});
-						return acc;
-					}, {});
-					setLetterColors(letterColors);
+					const _letterColors = formattedGuesses.reduce(
+						(acc, row) => {
+							row.forEach(({letter, color}) => {
+								if (letter && color !== 'white') {
+									acc[letter] = color;
+								}
+							});
+							return acc;
+						},
+						{},
+					);
+					setLetterColors(_letterColors);
 				}
 			});
 		}
 	}, [userId]);
-
-	const handleGuessWrapper = () => {
-		handleGuess(
-			currentRow,
-			guesses,
-			setGuesses,
-			solution,
-			setLetterColors,
-			setMessage,
-			setCurrentRow,
-			userId,
-		);
-	};
 
 	return (
 		<Container>

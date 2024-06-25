@@ -1,11 +1,8 @@
+// src/components/AuthScreen.tsx
 import React, {useState} from 'react';
 import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
-import {getSupabaseClient, setSupabaseAuthSession} from '@supabaseClient';
-import {setUser} from '@redux/authSlice';
-import {setHive} from '@redux/hiveSlice';
-
+import {useAuth} from './AuthContext';
 import {
 	Container,
 	Wrapper,
@@ -19,54 +16,12 @@ import {
 const AuthScreen: React.FC = () => {
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
-	const [isSignUp, setIsSignUp] = useState<boolean>(false);
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
+	const {isSignUp, toggleAuthMode, handleAuth} = useAuth();
 
-	const handleAuth = async () => {
-		const supabase = getSupabaseClient();
+	const onAuth = async () => {
 		try {
-			let response;
-			if (isSignUp) {
-				response = await supabase.auth.signUp({email, password});
-			} else {
-				response = await supabase.auth.signInWithPassword({
-					email,
-					password,
-				});
-			}
-			if (response.error) {
-				throw response.error;
-			}
-			const {session, user} = response.data;
-			await setSupabaseAuthSession(session);
-			dispatch(
-				setUser({
-					user,
-					token: {
-						access_token: session.access_token,
-						refresh_token: session.refresh_token,
-					},
-				}),
-			);
-
-			// Fetch the hive information
-			const {data: hiveData, error: hiveError} = await supabase
-				.from('hive_memberships')
-				.select('hive_id, hives(name)')
-				.eq('user_id', user.id);
-
-			if (hiveError) {
-				throw hiveError;
-			}
-
-			if (hiveData.length > 0) {
-				const hive = hiveData[0];
-				dispatch(setHive({id: hive.hive_id, name: hive.hives.name}));
-			} else {
-				dispatch(setHive({id: null, name: null}));
-			}
-
+			await handleAuth(email, password);
 			navigation.navigate('Home');
 		} catch (error: any) {
 			Alert.alert(
@@ -76,34 +31,48 @@ const AuthScreen: React.FC = () => {
 		}
 	};
 
-	const toggleAuthMode = () => {
-		setIsSignUp(!isSignUp);
-	};
+	const formFields = [
+		{
+			placeholder: 'Email',
+			value: email,
+			onChangeText: setEmail,
+			keyboardType: 'email-address',
+			autoCapitalize: 'none',
+			secureTextEntry: false,
+		},
+		{
+			placeholder: 'Password',
+			value: password,
+			onChangeText: setPassword,
+			secureTextEntry: true,
+		},
+	];
 
 	return (
 		<Container>
 			<Wrapper>
 				<Title>HiveMind</Title>
-				<Input
-					placeholder="Email"
-					value={email}
-					onChangeText={setEmail}
-					keyboardType="email-address"
-					autoCapitalize="none"
-					placeholderTextColor="#888"
-				/>
-				<Input
-					placeholder="Password"
-					value={password}
-					onChangeText={setPassword}
-					secureTextEntry
-					placeholderTextColor="#888"
-				/>
-				<AuthButton onPress={handleAuth}>
-					<ButtonText>{isSignUp ? 'Sign Up' : 'Sign In'}</ButtonText>
+				{formFields.map((inputProps, index) => (
+					<Input
+						key={index}
+						placeholder={inputProps.placeholder}
+						value={inputProps.value}
+						onChangeText={inputProps.onChangeText}
+						keyboardType={inputProps.keyboardType}
+						autoCapitalize={inputProps.autoCapitalize}
+						placeholderTextColor="#888"
+						secureTextEntry={inputProps.secureTextEntry}
+					/>
+				))}
+				<AuthButton onPress={onAuth}>
+					<ButtonText color={'#fff'}>
+						{isSignUp ? 'Sign Up' : 'Sign In'}
+					</ButtonText>
 				</AuthButton>
 				<ToggleAuthButton onPress={toggleAuthMode}>
-					<ButtonText>{isSignUp ? 'Sign In' : 'Sign Up'}</ButtonText>
+					<ButtonText color={'#444'}>
+						{isSignUp ? 'Sign In' : 'Sign Up'}
+					</ButtonText>
 				</ToggleAuthButton>
 			</Wrapper>
 		</Container>

@@ -5,7 +5,7 @@ export const fetchHiveMembers = async (hiveId: string) => {
 	try {
 		const {data, error} = await supabase
 			.from('hive_memberships')
-			.select(`user_id`)
+			.select('user_id')
 			.eq('hive_id', hiveId);
 
 		if (error) {

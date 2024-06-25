@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	GridWrapper,
-	UserEmail,
 	GridContainer,
 	Row,
 	Cell,
@@ -15,10 +14,9 @@ interface Guess {
 
 interface GridProps {
 	guesses: Guess[][];
-	email: string;
 }
 
-const Grid: React.FC<GridProps> = ({guesses, email}) => {
+const Grid: React.FC<GridProps> = ({guesses}) => {
 	return (
 		<GridWrapper>
 			<GridContainer>
