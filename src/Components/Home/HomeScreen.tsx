@@ -1,37 +1,38 @@
 // src/Games/HomeScreen.tsx
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {Button as RNButton} from 'react-native';
-import {fetchUserGuesses} from '@wordle/WordleUtils/fetchUserGuesses';
-import {Container, Header, WelcomeText} from './StyledHome';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button as RNButton } from 'react-native';
+import { fetchUserGuesses } from '@wordle/WordleUtils/fetchUserGuesses';
+import { Container, Header, WelcomeText } from './StyledHome';
 import styled from 'styled-components/native';
-import {signOut} from '@redux/authSlice';
-import {RootState} from '@redux/store';
+import { signOut } from '@redux/authSlice';
+import { RootState } from '@redux/store';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.auth.user);
 	const hive = useSelector((state: RootState) => state.hive);
-	const [currentUserHasGuessed, setCurrentUserHasGuessed] =
-		useState<boolean>(false);
+	const [currentUserHasGuessed, setCurrentUserHasGuessed] = useState<boolean>(false);
+	const [todayCompleted, setTodayCompleted] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-		const loadGuesses = async () => {
-			setLoading(true);
-			const {currentUserHasGuessed, todayCompleted} =
-				await fetchUserGuesses(
-					new Date().toISOString().split('T')[0],
-					user?.id,
-				);
-			setCurrentUserHasGuessed(todayCompleted);
-			setLoading(false);
-		};
+	const loadGuesses = useCallback(async () => {
+		setLoading(true);
+		const { currentUserHasGuessed, todayCompleted } = await fetchUserGuesses(
+			new Date().toISOString().split('T')[0],
+			user?.id
+		);
+		setCurrentUserHasGuessed(currentUserHasGuessed);
+		setTodayCompleted(todayCompleted);
+		setLoading(false);
+	}, [user?.id]);
 
-		console.log('hello');
-
-		loadGuesses();
-	}, [user]);
+	useFocusEffect(
+		useCallback(() => {
+			loadGuesses();
+		}, [loadGuesses])
+	);
 
 	const handleSignOut = () => {
 		dispatch(signOut());
@@ -52,18 +53,17 @@ const HomeScreen = ({navigation}) => {
 				<Button
 					onPress={() => navigation.navigate('Wordle')}
 					disabled={!hive.id}
-					style={{backgroundColor: hive.id ? '#007AFF' : '#B0C4DE'}}>
+					style={{ backgroundColor: hive.id ? '#007AFF' : '#B0C4DE' }}
+				>
 					<ButtonText>Play Wordle</ButtonText>
 				</Button>
 				<Button
 					onPress={() => navigation.navigate('WordleGuesses')}
-					disabled={!hive.id || !currentUserHasGuessed}
+					disabled={!hive.id || !todayCompleted}
 					style={{
-						backgroundColor:
-							hive.id && currentUserHasGuessed
-								? '#007AFF'
-								: '#B0C4DE',
-					}}>
+						backgroundColor: hive.id && todayCompleted ? '#007AFF' : '#B0C4DE',
+					}}
+				>
 					<ButtonText>View Today’s Scores</ButtonText>
 				</Button>
 			</ButtonRow>
