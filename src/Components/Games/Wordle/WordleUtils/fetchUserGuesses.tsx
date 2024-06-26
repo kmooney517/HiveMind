@@ -30,7 +30,7 @@ export const fetchUserGuesses = async (
 			.eq('date', selectedDate)
 			.in(
 				'user_id',
-				hiveMembers.map((member) => member.user_id),
+				hiveMembers.map(member => member.user_id),
 			);
 
 		if (guessesError) {
@@ -76,7 +76,7 @@ export const fetchUserGuesses = async (
 			todayCompleted = allGreen || maxGuessesReached;
 
 			const member = hiveMembers.find(
-				(member) => member.user_id === guess.user_id,
+				member => member.user_id === guess.user_id,
 			);
 
 			return {

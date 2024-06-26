@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, TextInput, Button, Alert, Text } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Modal, TextInput, Button, Alert, Text} from 'react-native';
 import styled from 'styled-components/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { getSupabaseClient } from '@supabaseClient';
-import { RootState } from '@redux/store';
-import { setProfile, clearProfile } from '@redux/profileSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import {getSupabaseClient} from '@supabaseClient';
+import {RootState} from '@redux/store';
+import {setProfile, clearProfile} from '@redux/profileSlice';
 
-const ProfileModal: React.FC<{ isVisible: boolean, onClose: () => void }> = ({ isVisible, onClose }) => {
+const ProfileModal: React.FC<{isVisible: boolean; onClose: () => void}> = ({
+	isVisible,
+	onClose,
+}) => {
 	const [name, setName] = useState<string>('');
 	const [initialName, setInitialName] = useState<string>('');
 	const userId = useSelector((state: RootState) => state.auth.user?.id);
@@ -29,7 +32,7 @@ const ProfileModal: React.FC<{ isVisible: boolean, onClose: () => void }> = ({ i
 
 	const getProfile = async (userId: string) => {
 		try {
-			const { data, error } = await supabase
+			const {data, error} = await supabase
 				.from('profiles')
 				.select('*')
 				.eq('user_id', userId)
@@ -63,9 +66,9 @@ const ProfileModal: React.FC<{ isVisible: boolean, onClose: () => void }> = ({ i
 
 	const createOrUpdateProfile = async (userId: string, name: string) => {
 		try {
-			const { data, error } = await supabase
+			const {data, error} = await supabase
 				.from('profiles')
-				.upsert({ user_id: userId, name }, { onConflict: ['user_id'] })
+				.upsert({user_id: userId, name}, {onConflict: ['user_id']})
 				.select('*')
 				.single();
 
@@ -92,14 +95,19 @@ const ProfileModal: React.FC<{ isVisible: boolean, onClose: () => void }> = ({ i
 	return (
 		<Modal visible={isVisible} animationType="slide">
 			<Container>
-				<Title>{profile.id ? 'Update Profile' : 'Create Profile'}</Title>
+				<Title>
+					{profile.id ? 'Update Profile' : 'Create Profile'}
+				</Title>
 				<Input
 					placeholder="Enter Name"
 					value={name}
 					onChangeText={setName}
 				/>
 				<ButtonRow>
-					<SaveButton title="Save Profile" onPress={handleSaveProfile} />
+					<SaveButton
+						title="Save Profile"
+						onPress={handleSaveProfile}
+					/>
 					<CancelButton title="Cancel" onPress={handleClearProfile} />
 				</ButtonRow>
 				{profile.id && <ProfileText>Name: {profile.name}</ProfileText>}

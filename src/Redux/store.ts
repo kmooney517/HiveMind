@@ -23,7 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
 	auth: authReducer,
 	hive: hiveReducer,
-	profile: profileReducer
+	profile: profileReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

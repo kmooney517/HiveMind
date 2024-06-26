@@ -1,9 +1,9 @@
-import { getSupabaseClient } from '@supabaseClient';
+import {getSupabaseClient} from '@supabaseClient';
 
-export const fetchHiveMembers = async (hiveId) => {
+export const fetchHiveMembers = async hiveId => {
 	const supabase = getSupabaseClient();
 	try {
-		const { data, error } = await supabase
+		const {data, error} = await supabase
 			.from('hive_memberships')
 			.select('user_id, profiles!inner(name)')
 			.eq('hive_id', hiveId);
@@ -20,7 +20,7 @@ export const fetchHiveMembers = async (hiveId) => {
 
 		return data.map(member => ({
 			user_id: member.user_id,
-			name: member.profiles.name
+			name: member.profiles.name,
 		}));
 	} catch (error) {
 		console.error('Error fetching hive members:', error.message || error);
