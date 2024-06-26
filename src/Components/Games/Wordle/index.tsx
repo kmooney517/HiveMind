@@ -54,10 +54,14 @@ const Wordle = (): React.JSX.Element => {
 						combinedData.find(guess => guess.user_id === userId)
 							?.guess || [];
 					setGuesses(formattedGuesses);
-					setCurrentRow(
-						formattedGuesses.filter((row: any) => row.length > 0)
-							.length,
+
+					const nextEmptyRow = formattedGuesses.findIndex(
+						row => row.every(cell => cell.letter === ''),
 					);
+					setCurrentRow(
+						nextEmptyRow !== -1 ? nextEmptyRow : formattedGuesses.length,
+					);
+
 					const _letterColors = formattedGuesses.reduce(
 						(acc, row) => {
 							row.forEach(({letter, color}) => {
