@@ -49,7 +49,7 @@ const AuthScreen: React.FC = () => {
 	];
 
 	return (
-		<Container>
+		<Container source={require('./background.png')}>
 			<Wrapper>
 				<Title>HiveMind</Title>
 				{formFields.map((inputProps, index) => (
@@ -70,7 +70,7 @@ const AuthScreen: React.FC = () => {
 					</ButtonText>
 				</AuthButton>
 				<ToggleAuthButton onPress={toggleAuthMode}>
-					<ButtonText color={'#444'}>
+					<ButtonText color={'#ffcc00'}>
 						{isSignUp ? 'Sign In' : 'Sign Up'}
 					</ButtonText>
 				</ToggleAuthButton>

@@ -1,26 +1,32 @@
 // src/components/StyledAuth.tsx
 import styled from 'styled-components/native';
+import { ImageBackground } from 'react-native';
 
-export const Container = styled.View`
-	flex: 1;
-	justify-content: center;
-	align-items: center;
-	background-color: #f0f4f8;
-	padding: 20px;
-	width: 100%;
+export const Container = styled(ImageBackground).attrs({
+    resizeMode: 'cover', // Example prop to control how the image is resized
+    opacity: 0.1
+})`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5); // Example of adding a semi-transparent overlay
 `;
 
 export const Wrapper = styled.View`
 	align-items: center;
 	width: 85%;
+	
+	padding: 40px;
+	border-radius: 5px;
 `;
 
 export const Title = styled.Text`
-	font-size: 36px;
+	font-size: 46px;
 	font-weight: bold;
-	color: #4b9ce2;
+	color: #000;
 	margin-bottom: 30px;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 `;
 
 export const Input = styled.TextInput`
@@ -40,7 +46,7 @@ export const AuthButton = styled.TouchableOpacity`
 	padding: 15px;
 	margin-top: 10px;
 	border-radius: 8px;
-	background-color: #4b9ce2;
+	background-color: #ffcc00;
 	align-items: center;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
@@ -50,14 +56,11 @@ export const ToggleAuthButton = styled.TouchableOpacity`
 	padding: 15px;
 	margin-top: 10px;
 	border-radius: 8px;
-	background-color: #ffcc00;
 	align-items: center;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const ButtonText = styled.Text`
 	color: ${props => props.color};
-	font-size: 16px;
+	font-size: 22px;
 	font-weight: bold;
-	text-shadow: 1px 1px 2px rgba(255, 204, 0, 0.6);
 `;
