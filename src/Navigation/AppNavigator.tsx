@@ -6,7 +6,8 @@ import Wordle from '@wordle';
 import WordleGuesses from '@games/WordleGuesses';
 import HomeScreen from '@home/HomeScreen';
 import {useSelector} from 'react-redux';
-import JoinHive from '@hive/JoinHive';
+import HiveView from '@hive/HiveView';
+import Profile from '@profile';
 import {RootState} from '@redux/store';
 
 const Stack = createNativeStackNavigator();
@@ -37,10 +38,17 @@ const AppNavigator = (): React.JSX.Element => {
 							component={WordleGuesses}
 						/>
 						<Stack.Screen
-							name="JoinHive"
-							component={JoinHive}
+							name="HiveView"
+							component={HiveView}
 							options={{
 								title: hive.id ? 'Hive Details' : 'Join Hive',
+							}}
+						/>
+						<Stack.Screen
+							name="Profile"
+							component={Profile}
+							options={{
+								headerShown: false,
 							}}
 						/>
 					</>

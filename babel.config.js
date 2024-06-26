@@ -14,6 +14,7 @@ module.exports = {
 					'@games': './src/Components/Games',
 					'@home': './src/Components/Home',
 					'@hive': './src/Components/Hive',
+					'@profile': './src/Components/Profile',
 					'@wordle': './src/Components/Games/Wordle',
 					'@supabaseClient': './supabaseClient',
 				},

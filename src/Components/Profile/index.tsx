@@ -1,27 +1,33 @@
 import React, {useState, useEffect} from 'react';
-import {Modal, Button, Alert} from 'react-native';
-import styled from 'styled-components/native';
 import {useSelector, useDispatch} from 'react-redux';
-import {getSupabaseClient} from '@supabaseClient';
 import {RootState} from '@redux/store';
-import {setProfile, clearProfile} from '@redux/profileSlice';
+import {
+	getProfile,
+	handleSaveProfile,
+	handleClearProfile,
+} from './profileHelpers';
+import {
+	Container,
+	Title,
+	Input,
+	ButtonRow,
+	SaveButton,
+	CancelButton,
+	ProfileText,
+} from './StyledProfile';
 
-const ProfileModal: React.FC<{isVisible: boolean; onClose: () => void}> = ({
-	isVisible,
-	onClose,
-}) => {
+const Profile = ({navigation}) => {
 	const [name, setName] = useState<string>('');
 	const [initialName, setInitialName] = useState<string>('');
 	const userId = useSelector((state: RootState) => state.auth.user?.id);
 	const profile = useSelector((state: RootState) => state.profile);
 	const dispatch = useDispatch();
-	const supabase = getSupabaseClient();
 
 	useEffect(() => {
 		if (userId) {
-			getProfile(userId);
+			getProfile(userId, dispatch);
 		}
-	}, [userId]);
+	}, [userId, dispatch]);
 
 	useEffect(() => {
 		if (profile.name) {
@@ -30,135 +36,31 @@ const ProfileModal: React.FC<{isVisible: boolean; onClose: () => void}> = ({
 		}
 	}, [profile]);
 
-	const getProfile = async (id: string) => {
-		try {
-			const {data, error} = await supabase
-				.from('profiles')
-				.select('*')
-				.eq('user_id', id)
-				.single();
-
-			if (error && error.code !== 'PGRST116') {
-				throw new Error(error.message);
-			}
-
-			if (data) {
-				dispatch(setProfile(data));
-			} else {
-				dispatch(clearProfile());
-				setName('');
-				setInitialName('');
-			}
-		} catch (error) {
-			console.error('Error fetching profile:', error.message);
-		}
-	};
-
-	const handleSaveProfile = async () => {
-		try {
-			await createOrUpdateProfile(userId, name);
-			Alert.alert('Profile saved successfully!');
-			onClose();
-		} catch (error) {
-			Alert.alert('Error saving profile:', error.message || error);
-		}
-	};
-
-	const createOrUpdateProfile = async (id: string, profileName: string) => {
-		try {
-			const {data, error} = await supabase
-				.from('profiles')
-				.upsert(
-					{user_id: id, name: profileName},
-					{onConflict: ['user_id']},
-				)
-				.select('*')
-				.single();
-
-			if (error) {
-				throw new Error(error.message);
-			}
-
-			if (data) {
-				dispatch(setProfile(data));
-			} else {
-				throw new Error('Profile data is null');
-			}
-		} catch (error) {
-			console.error('Error creating or updating profile:', error.message);
-			throw error;
-		}
-	};
-
-	const handleClearProfile = () => {
-		setName(initialName); // Reset the name to the initial value
-		onClose();
-	};
-
 	return (
-		<Modal visible={isVisible} animationType="slide">
-			<Container>
-				<Title>
-					{profile.id ? 'Update Profile' : 'Create Profile'}
-				</Title>
-				<Input
-					placeholder="Enter Name"
-					value={name}
-					onChangeText={setName}
+		<Container>
+			<Title>{profile.id ? 'Update Profile' : 'Create Profile'}</Title>
+			<Input
+				placeholder="Enter Name"
+				value={name}
+				onChangeText={setName}
+			/>
+			<ButtonRow>
+				<SaveButton
+					title="Save Profile"
+					onPress={() =>
+						handleSaveProfile(userId, name, dispatch, navigation)
+					}
 				/>
-				<ButtonRow>
-					<SaveButton
-						title="Save Profile"
-						onPress={handleSaveProfile}
-					/>
-					<CancelButton title="Cancel" onPress={handleClearProfile} />
-				</ButtonRow>
-				{profile.id && <ProfileText>Name: {profile.name}</ProfileText>}
-			</Container>
-		</Modal>
+				<CancelButton
+					title="Cancel"
+					onPress={() =>
+						handleClearProfile(initialName, setName, navigation)
+					}
+				/>
+			</ButtonRow>
+			{profile.id && <ProfileText>Name: {profile.name}</ProfileText>}
+		</Container>
 	);
 };
 
-const Container = styled.View`
-	flex: 1;
-	justify-content: center;
-	align-items: center;
-	padding: 16px;
-	background-color: #f0f0f0;
-`;
-
-const Title = styled.Text`
-	font-size: 24px;
-	font-weight: bold;
-	margin-bottom: 16px;
-`;
-
-const Input = styled.TextInput`
-	width: 100%;
-	padding: 12px;
-	margin-bottom: 16px;
-	border-width: 1px;
-	border-color: #ccc;
-	border-radius: 4px;
-`;
-
-const ButtonRow = styled.View`
-	flex-direction: row;
-	justify-content: space-around;
-	width: 100%;
-`;
-
-const SaveButton = styled(Button)`
-	margin-top: 12px;
-`;
-
-const CancelButton = styled(Button)`
-	margin-top: 12px;
-`;
-
-const ProfileText = styled.Text`
-	font-size: 18px;
-	margin-top: 16px;
-`;
-
-export default ProfileModal;
+export default Profile;
