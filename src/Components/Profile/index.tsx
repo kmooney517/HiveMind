@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Modal, TextInput, Button, Alert, Text} from 'react-native';
+import {Modal, Button, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {getSupabaseClient} from '@supabaseClient';
@@ -30,12 +30,12 @@ const ProfileModal: React.FC<{isVisible: boolean; onClose: () => void}> = ({
 		}
 	}, [profile]);
 
-	const getProfile = async (userId: string) => {
+	const getProfile = async (id: string) => {
 		try {
 			const {data, error} = await supabase
 				.from('profiles')
 				.select('*')
-				.eq('user_id', userId)
+				.eq('user_id', id)
 				.single();
 
 			if (error && error.code !== 'PGRST116') {
@@ -64,11 +64,14 @@ const ProfileModal: React.FC<{isVisible: boolean; onClose: () => void}> = ({
 		}
 	};
 
-	const createOrUpdateProfile = async (userId: string, name: string) => {
+	const createOrUpdateProfile = async (id: string, profileName: string) => {
 		try {
 			const {data, error} = await supabase
 				.from('profiles')
-				.upsert({user_id: userId, name}, {onConflict: ['user_id']})
+				.upsert(
+					{user_id: id, name: profileName},
+					{onConflict: ['user_id']},
+				)
 				.select('*')
 				.single();
 

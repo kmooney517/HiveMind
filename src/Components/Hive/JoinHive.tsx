@@ -17,13 +17,13 @@ const JoinHive: React.FC = () => {
 
 	useEffect(() => {
 		if (hiveId) {
-			fetchMembers(hiveId);
+			fetchMembers();
 		}
 	}, [hiveId]);
 
 	const supabase = getSupabaseClient();
 
-	const fetchMembers = async (hiveId: string) => {
+	const fetchMembers = async () => {
 		try {
 			const members = await fetchHiveMembers(hiveId);
 			setHiveMembers(members);

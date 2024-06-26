@@ -76,7 +76,7 @@ export const fetchUserGuesses = async (
 			todayCompleted = allGreen || maxGuessesReached;
 
 			const member = hiveMembers.find(
-				member => member.user_id === guess.user_id,
+				_member => _member.user_id === guess.user_id,
 			);
 
 			return {
