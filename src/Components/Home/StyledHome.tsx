@@ -35,7 +35,6 @@ export const ButtonText = styled.Text`
 	color: ${({color}) => color || '#ffffff'};
 	font-size: 18px;
 	font-weight: 600;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 `;
 
 export const Header = styled.View`
