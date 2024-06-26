@@ -19,7 +19,7 @@ import {RootState} from '@redux/store';
 interface UserGuess {
 	user_id: string;
 	guess: {letter: string; color: string}[][];
-	email: string;
+	name: string;
 	guessesTaken: number;
 }
 
@@ -83,7 +83,7 @@ const WordleGuesses: React.FC = () => {
 											<GridWrapper
 												key={userGuess.user_id}>
 												<UserText>
-													{userGuess.user_id}
+													{userGuess.name}
 												</UserText>
 												<Grid
 													guesses={userGuess.guess}

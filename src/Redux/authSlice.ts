@@ -1,8 +1,10 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch } from '@redux/store';
+import { clearProfile } from './profileSlice';
 
 interface AuthState {
 	user: any;
-	token: {access_token: string; refresh_token: string} | null;
+	token: { access_token: string; refresh_token: string } | null;
 }
 
 const initialState: AuthState = {
@@ -18,19 +20,24 @@ const authSlice = createSlice({
 			state,
 			action: PayloadAction<{
 				user: any;
-				token: {access_token: string; refresh_token: string};
+				token: { access_token: string; refresh_token: string };
 			}>,
 		) => {
 			state.user = action.payload.user;
 			state.token = action.payload.token;
 		},
-		signOut: state => {
+		signOut: (state) => {
 			state.user = null;
 			state.token = null;
 		},
 	},
 });
 
-export const {setUser, signOut} = authSlice.actions;
+export const { setUser, signOut } = authSlice.actions;
+
+export const performSignOut = () => (dispatch: AppDispatch) => {
+	dispatch(signOut());
+	dispatch(clearProfile());
+};
 
 export default authSlice.reducer;

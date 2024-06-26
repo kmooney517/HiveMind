@@ -38,6 +38,8 @@ const Wordle = (): React.JSX.Element => {
 	);
 
 	const userId = useSelector((state: RootState) => state.auth.user?.id);
+	const hiveId = useSelector((state: RootState) => state.hive?.id);
+
 
 	useEffect(() => {
 		fetchSolution(setSolution);
@@ -46,6 +48,7 @@ const Wordle = (): React.JSX.Element => {
 			fetchUserGuesses(
 				new Date().toISOString().split('T')[0],
 				userId,
+				hiveId
 			).then(({combinedData, currentUserHasGuessed}) => {
 				if (currentUserHasGuessed) {
 					const formattedGuesses =

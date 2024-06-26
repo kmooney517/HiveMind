@@ -3,41 +3,35 @@ import {getSupabaseClient} from '@supabaseClient';
 export const fetchUserGuesses = async (
 	selectedDate: string,
 	currentUser: string | undefined,
+	hiveId: string | undefined,
 ) => {
 	try {
 		const supabase = getSupabaseClient();
 
-		// Fetch the hive ID of the current user
-		const {data: membershipData, error: membershipError} = await supabase
-			.from('hive_memberships')
-			.select('hive_id')
-			.eq('user_id', currentUser)
-			.single();
-
-		if (membershipError) {
-			throw membershipError;
-		}
-
-		const hiveId = membershipData.hive_id;
-
 		// Fetch members of the hive
 		const {data: membersData, error: membersError} = await supabase
 			.from('hive_memberships')
-			.select('user_id')
+			.select('user_id, profiles(name)')
 			.eq('hive_id', hiveId);
 
 		if (membersError) {
 			throw membersError;
 		}
 
-		const hiveMembers = membersData.map((member: any) => member.user_id);
+		const hiveMembers = membersData.map((member: any) => ({
+			user_id: member.user_id,
+			name: member.profiles.name,
+		}));
 
 		// Fetch all guesses for the selected date from hive members
 		const {data: guessesData, error: guessesError} = await supabase
 			.from('user_guesses')
 			.select('*')
 			.eq('date', selectedDate)
-			.in('user_id', hiveMembers);
+			.in(
+				'user_id',
+				hiveMembers.map((member) => member.user_id),
+			);
 
 		if (guessesError) {
 			throw guessesError;
@@ -81,13 +75,17 @@ export const fetchUserGuesses = async (
 
 			todayCompleted = allGreen || maxGuessesReached;
 
+			const member = hiveMembers.find(
+				(member) => member.user_id === guess.user_id,
+			);
+
 			return {
 				...guess,
 				guess: formattedGuesses,
 				guessesTaken: formattedGuesses.filter((row: any) =>
 					row.some((cell: any) => cell.letter !== ''),
 				).length,
-				// advantage: calculateAdvantage(guess.guess) // Keep this commented for now
+				name: member?.name || guess.user_id,
 			};
 		});
 

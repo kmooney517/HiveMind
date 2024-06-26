@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {combineReducers} from 'redux';
 import authReducer from './authSlice';
 import hiveReducer from './hiveSlice';
+import profileReducer from './profileSlice';
 
 const persistConfig = {
 	key: 'root',
@@ -22,6 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
 	auth: authReducer,
 	hive: hiveReducer,
+	profile: profileReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
