@@ -5,12 +5,12 @@ import {Dispatch} from 'redux';
 
 const supabase = getSupabaseClient();
 
-export const getProfile = async (id: string, dispatch: Dispatch) => {
+export const getProfile = async (userId, dispatch) => {
 	try {
 		const {data, error} = await supabase
 			.from('profiles')
 			.select('*')
-			.eq('user_id', id)
+			.eq('user_id', userId)
 			.single();
 
 		if (error && error.code !== 'PGRST116') {
@@ -24,6 +24,7 @@ export const getProfile = async (id: string, dispatch: Dispatch) => {
 		}
 	} catch (error) {
 		console.error('Error fetching profile:', error.message);
+		dispatch(clearProfile());
 	}
 };
 

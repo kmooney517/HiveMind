@@ -38,11 +38,7 @@ export const fetchUserGuesses = async (
 		}
 
 		let todayCompleted = false;
-
-		// Check if the current user has submitted a guess for the selected date
-		const currentUserGuess = guessesData.some(
-			(guess: any) => guess.user_id === currentUser,
-		);
+		let currentUserHasGuessed = false;
 
 		const combinedData = guessesData.map((guess: any) => {
 			const formattedGuesses = guess.guess.map((row: any) => {
@@ -73,7 +69,11 @@ export const fetchUserGuesses = async (
 				lastRow && lastRow.every(cell => cell.color === 'green');
 			const maxGuessesReached = rowsWithGuesses.length >= 6;
 
-			todayCompleted = allGreen || maxGuessesReached;
+			// Update today's completion status for the current user
+			if (guess.user_id === currentUser) {
+				currentUserHasGuessed = true;
+				todayCompleted = allGreen || maxGuessesReached;
+			}
 
 			const member = hiveMembers.find(
 				_member => _member.user_id === guess.user_id,
@@ -91,7 +91,7 @@ export const fetchUserGuesses = async (
 
 		return {
 			combinedData,
-			currentUserHasGuessed: currentUserGuess,
+			currentUserHasGuessed,
 			todayCompleted,
 		};
 	} catch (error) {

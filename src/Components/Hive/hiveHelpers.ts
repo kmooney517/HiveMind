@@ -25,7 +25,6 @@ export const handleJoinHive = async (
 	dispatch: Dispatch,
 	setHiveMembers: (members: any[]) => void,
 	setHiveName: (name: string) => void,
-	setHiveId: (id: string) => void,
 ) => {
 	if (!hiveName || !userId) {
 		Alert.alert('Please enter a hive name.');
@@ -75,7 +74,6 @@ export const handleJoinHive = async (
 		await fetchMembers(hiveIdToUse, setHiveMembers);
 		Alert.alert('Successfully joined the hive!');
 		setHiveName(hiveNameFetched);
-		setHiveId(hiveIdToUse);
 	} catch (error: any) {
 		console.error('Error joining hive:', error.message || error);
 		Alert.alert('Error joining hive. Please try again.');
