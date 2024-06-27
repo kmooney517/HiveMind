@@ -3,35 +3,29 @@ import styled from 'styled-components/native';
 import {ImageBackground} from 'react-native';
 
 export const Container = styled(ImageBackground).attrs({
-	resizeMode: 'cover', // Example prop to control how the image is resized
-	opacity: 0.1,
+	resizeMode: 'cover',
+	opacity: 0.4
 })`
 	flex: 1;
 	justify-content: center;
 	align-items: center;
 	padding: 20px;
-	background-color: rgba(
-		0,
-		0,
-		0,
-		0.5
-	); // Example of adding a semi-transparent overlay
 `;
 
 export const Wrapper = styled.View`
+	opacity: 1;
 	align-items: center;
 	width: 85%;
-
 	padding: 40px;
 	border-radius: 5px;
 `;
 
 export const Title = styled.Text`
-	font-size: 46px;
+	font-size: 52px;
 	font-weight: bold;
 	color: #ffcc00;
 	margin-bottom: 30px;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
 `;
 
 export const Input = styled.TextInput`
@@ -65,7 +59,8 @@ export const ToggleAuthButton = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-	color: ${props => props.color};
-	font-size: 22px;
+	color: #000;
+	font-size: 24px;
 	font-weight: bold;
+
 `;
