@@ -55,11 +55,13 @@ const Wordle = (): React.JSX.Element => {
 							?.guess || [];
 					setGuesses(formattedGuesses);
 
-					const nextEmptyRow = formattedGuesses.findIndex(
-						row => row.every(cell => cell.letter === ''),
+					const nextEmptyRow = formattedGuesses.findIndex(row =>
+						row.every(cell => cell.letter === ''),
 					);
 					setCurrentRow(
-						nextEmptyRow !== -1 ? nextEmptyRow : formattedGuesses.length,
+						nextEmptyRow !== -1
+							? nextEmptyRow
+							: formattedGuesses.length,
 					);
 
 					const _letterColors = formattedGuesses.reduce(

@@ -6,12 +6,15 @@ import {
 	handleSaveProfile,
 	handleClearProfile,
 } from './profileHelpers';
+import {Alert} from 'react-native';
 import {
 	Container,
 	Title,
+	Label,
 	Input,
 	ButtonRow,
-	SaveButton,
+	StyledButton,
+	ButtonText,
 	CancelButton,
 	ProfileText,
 } from './StyledProfile';
@@ -39,26 +42,42 @@ const Profile = ({navigation}) => {
 	return (
 		<Container>
 			<Title>{profile.id ? 'Update Profile' : 'Create Profile'}</Title>
+			<Label>Name</Label>
 			<Input
 				placeholder="Enter Name"
 				value={name}
 				onChangeText={setName}
 			/>
 			<ButtonRow>
-				<SaveButton
-					title="Save Profile"
-					onPress={() =>
-						handleSaveProfile(userId, name, dispatch, navigation)
-					}
-				/>
+				<StyledButton
+					onPress={() => {
+						if (profile.name == '' && name == '') {
+							Alert.alert('You need a name!');
+						} else {
+							handleSaveProfile(
+								userId,
+								name,
+								dispatch,
+								navigation,
+							);
+						}
+					}}
+					bgColor="#4b9ce2">
+					<ButtonText>Save Profile</ButtonText>
+				</StyledButton>
 				<CancelButton
 					title="Cancel"
-					onPress={() =>
-						handleClearProfile(initialName, setName, navigation)
-					}
+					onPress={() => {
+						if (profile.name) {
+							handleClearProfile(
+								initialName,
+								setName,
+								navigation,
+							);
+						}
+					}}
 				/>
 			</ButtonRow>
-			{profile.id && <ProfileText>Name: {profile.name}</ProfileText>}
 		</Container>
 	);
 };

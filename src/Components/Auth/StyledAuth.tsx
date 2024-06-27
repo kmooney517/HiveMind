@@ -1,22 +1,27 @@
 // src/components/StyledAuth.tsx
 import styled from 'styled-components/native';
-import { ImageBackground } from 'react-native';
+import {ImageBackground} from 'react-native';
 
 export const Container = styled(ImageBackground).attrs({
-    resizeMode: 'cover', // Example prop to control how the image is resized
-    opacity: 0.1
+	resizeMode: 'cover', // Example prop to control how the image is resized
+	opacity: 0.1,
 })`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.5); // Example of adding a semi-transparent overlay
+	flex: 1;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	background-color: rgba(
+		0,
+		0,
+		0,
+		0.5
+	); // Example of adding a semi-transparent overlay
 `;
 
 export const Wrapper = styled.View`
 	align-items: center;
 	width: 85%;
-	
+
 	padding: 40px;
 	border-radius: 5px;
 `;
@@ -24,13 +29,13 @@ export const Wrapper = styled.View`
 export const Title = styled.Text`
 	font-size: 46px;
 	font-weight: bold;
-	color: #000;
+	color: #ffcc00;
 	margin-bottom: 30px;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 `;
 
 export const Input = styled.TextInput`
-	width: 100%;
+	width: 80%;
 	padding: 15px;
 	margin-bottom: 20px;
 	border-radius: 8px;
@@ -42,7 +47,7 @@ export const Input = styled.TextInput`
 `;
 
 export const AuthButton = styled.TouchableOpacity`
-	width: 100%;
+	width: 80%;
 	padding: 15px;
 	margin-top: 10px;
 	border-radius: 8px;

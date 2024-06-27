@@ -1,41 +1,61 @@
+// src/components/StyledProfile.tsx
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	flex: 1;
-	justify-content: center;
-	align-items: center;
-	padding: 16px;
-	background-color: #f0f0f0;
+	justify-content: flex-start;
+	align-items: flex-start;
+	margin: 100px;
 `;
 
 export const Title = styled.Text`
-	font-size: 24px;
+	font-size: 36px;
 	font-weight: bold;
-	margin-bottom: 16px;
+	color: #4b9ce2;
+	margin-bottom: 30px;
+`;
+
+export const Label = styled.Text`
+	font-size: 18px;
+	color: #000;
+	margin-bottom: 10px;
 `;
 
 export const Input = styled.TextInput`
 	width: 100%;
-	padding: 12px;
-	margin-bottom: 16px;
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 8px;
 	border-width: 1px;
-	border-color: #ccc;
-	border-radius: 4px;
+	border-color: #dcdcdc;
+	background-color: #fff;
+	font-size: 18px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const ButtonRow = styled.View`
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: flex-end;
 	width: 100%;
 `;
 
-export const SaveButton = styled.Button`
-	margin-top: 12px;
+export const StyledButton = styled.TouchableOpacity`
+	width: 25%;
+	padding: 10px;
+	margin-right: 10px;
+	border-radius: 8px;
+	align-items: center;
+	background-color: ${props => props.bgColor || '#4b9ce2'};
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-export const CancelButton = styled.Button`
-	margin-top: 12px;
+export const ButtonText = styled.Text`
+	color: ${props => props.color || '#fff'};
+	font-size: 16px;
+	font-weight: bold;
 `;
+
+export const CancelButton = styled.Button``;
 
 export const ProfileText = styled.Text`
 	font-size: 18px;

@@ -1,49 +1,54 @@
-// src/Games/StyledHome.tsx
-
+// src/components/StyledHome.tsx
 import styled from 'styled-components/native';
+import {ImageBackground} from 'react-native';
 
-export const Container = styled.View`
+export const Container = styled(ImageBackground).attrs({
+	resizeMode: 'cover', // Example prop to control how the image is resized
+	opacity: 0.1,
+})`
 	flex: 1;
-	padding: 16px;
-	background-color: #f0f0f0;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
 `;
 
 export const Header = styled.View`
-	flex-direction: row;
-	justify-content: space-between;
+	width: 100%;
 	align-items: center;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 `;
 
 export const WelcomeText = styled.Text`
-	font-size: 20px;
+	font-size: 24px;
 	font-weight: bold;
+	color: #ffcc00;
+	margin-bottom: 20px;
 `;
 
 export const ButtonRow = styled.View`
-	flex-direction: row;
-	justify-content: space-around;
 	width: 100%;
+	align-items: center;
 `;
 
 export const Button = styled.TouchableOpacity`
-	padding: 12px;
+	width: 80%;
+	padding: 15px;
+	margin-bottom: 15px;
 	border-radius: 8px;
-	background-color: #007aff;
+	background-color: #ffcc00;
 	align-items: center;
-	margin-top: 10px;
 `;
 
 export const ButtonText = styled.Text`
-	color: #ffffff;
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: bold;
+	color: #fff;
 `;
 
 export const PlayButton = styled(Button)`
-	background-color: ${({disabled}) => (disabled ? '#B0C4DE' : '#007AFF')};
+	background-color: #007aff;
 `;
 
 export const ViewScoresButton = styled(Button)`
-	background-color: ${({disabled}) => (disabled ? '#B0C4DE' : '#007AFF')};
+	background-color: #007aff;
 `;
