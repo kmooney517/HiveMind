@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {ScrollView} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState} from '@redux/store';
-import {fetchMembers, handleJoinHive, handleLeaveHive} from './hiveHelpers';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@redux/store';
+import { fetchMembers, handleJoinHive, handleLeaveHive } from './hiveHelpers';
 
 import {
 	Container,
@@ -33,18 +33,32 @@ const HiveView: React.FC = () => {
 			{hiveId ? (
 				<ScrollView>
 					<HiveMembersTitle>{`Hive Members - ${hiveNameState}`}</HiveMembersTitle>
-					{hiveMembers.map(member => {
-						return (
-							<MemberItem key={member.user_id}>
+					{hiveMembers.map(member => (
+						<MemberItem
+							key={member.user_id}
+							style={{
+								borderColor: member.completedToday ? 'green' : 'yellow',
+								borderWidth: 2,
+								padding: 10,
+								marginBottom: 10,
+							}}
+						>
+							<View style={{ flexDirection: 'column', alignItems: 'center' }}>
 								<MemberText>{member.name}</MemberText>
-							</MemberItem>
-						);
-					})}
+								<MemberText style={{ marginLeft: 10 }}>
+									{member.completedToday ? 'Today completed' : 'Today pending'}
+								</MemberText>
+								{member.isWorstPlayer && (
+									<MemberText style={{ marginLeft: 10, color: 'red' }}>
+										(Currently losing)
+									</MemberText>
+								)}
+							</View>
+						</MemberItem>
+					))}
 					<LeaveButton
 						title="Leave Hive"
-						onPress={() =>
-							handleLeaveHive(userId, dispatch, setHiveMembers)
-						}
+						onPress={() => handleLeaveHive(userId, dispatch, setHiveMembers)}
 					/>
 				</ScrollView>
 			) : (
@@ -57,13 +71,7 @@ const HiveView: React.FC = () => {
 					<JoinButton
 						title="Join or Create Hive"
 						onPress={() =>
-							handleJoinHive(
-								hiveName,
-								userId,
-								dispatch,
-								setHiveMembers,
-								setHiveName,
-							)
+							handleJoinHive(hiveName, userId, dispatch, setHiveMembers, setHiveName)
 						}
 					/>
 				</>
