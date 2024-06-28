@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	flex: 1;
-	padding-vertical: 60px;
+	padding-vertical: 10px;
 	padding-horizontal: 20px;
 `;
 
@@ -11,7 +11,7 @@ export const Title = styled.Text`
 	font-size: 36px;
 	font-weight: bold;
 	color: #4b9ce2;
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 `;
 
 export const Label = styled.Text`
