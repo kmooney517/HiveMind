@@ -21,8 +21,8 @@ export const Row = styled.View`
 `;
 
 export const Cell = styled.View`
-	width: 40px;
-	height: 40px;
+	width: ${props => (props.mini ? 20 : 40)}px;
+	height: ${props => (props.mini ? 20 : 40)}px;
 	margin: 2px;
 	align-items: center;
 	justify-content: center;

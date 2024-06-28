@@ -14,7 +14,6 @@ const Stack = createNativeStackNavigator();
 
 const AppNavigator = (): React.JSX.Element => {
 	const user = useSelector((state: RootState) => state.auth.user);
-	const hive = useSelector((state: RootState) => state.hive);
 
 	return (
 		<NavigationContainer>
@@ -34,15 +33,14 @@ const AppNavigator = (): React.JSX.Element => {
 						/>
 						<Stack.Screen name="Wordle" component={Wordle} />
 						<Stack.Screen
+							options={{headerShown: false}}
 							name="WordleGuesses"
 							component={WordleGuesses}
 						/>
 						<Stack.Screen
 							name="HiveView"
 							component={HiveView}
-							options={{
-								title: hive.id ? 'Hive Details' : 'Join Hive',
-							}}
+							options={{headerShown: false}}
 						/>
 						<Stack.Screen
 							name="Profile"

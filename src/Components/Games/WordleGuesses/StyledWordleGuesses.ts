@@ -3,33 +3,16 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
 	flex: 1;
 	padding: 20px;
-	background-color: #f5f5f5;
 `;
 
 export const DateInput = styled.TextInput`
 	width: 100%;
-	padding: 15px;
-	margin-bottom: 20px;
+	padding: 10px;
 	border-radius: 8px;
 	border-width: 1px;
-	border-color: #ddd;
+	border-color: #dcdcdc;
 	background-color: #fff;
 	font-size: 16px;
-`;
-
-export const FetchButton = styled.TouchableOpacity`
-	width: 100%;
-	padding: 15px;
-	margin-bottom: 20px;
-	border-radius: 8px;
-	background-color: #ffcc00;
-	align-items: center;
-`;
-
-export const ButtonText = styled.Text`
-	color: #fff;
-	font-size: 16px;
-	font-weight: bold;
 `;
 
 export const GuessGroup = styled.View`
@@ -37,30 +20,33 @@ export const GuessGroup = styled.View`
 `;
 
 export const GroupTitle = styled.Text`
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: bold;
 	margin-bottom: 10px;
 `;
 
 export const UserGrids = styled.View`
-	flex-direction: row;
-	flex-wrap: wrap;
+	display: flex;
+	flex-direction: column;
 `;
 
-export const GridWrapper = styled.View`
-	margin: 10px;
-	align-items: center;
+export const GridWrapper = styled.View<{isWorst: boolean}>`
+	padding: 10px;
+	margin-bottom: 10px;
+	border-width: 2px;
+	border-color: ${({isWorst}) => (isWorst ? 'red' : 'transparent')};
 `;
 
 export const UserText = styled.Text`
 	font-size: 16px;
-	font-weight: bold;
-	margin-bottom: 10px;
 `;
 
 export const MessageText = styled.Text`
 	font-size: 18px;
 	color: red;
 	text-align: center;
-	margin-top: 20px;
+`;
+
+export const BackButton = styled.TouchableOpacity`
+	padding-vertical: 20px;
 `;

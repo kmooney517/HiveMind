@@ -1,16 +1,15 @@
 // src/components/StyledAuth.tsx
 import styled from 'styled-components/native';
-import { ImageBackground, Dimensions } from 'react-native';
+import {ImageBackground, Dimensions} from 'react-native';
 
-const { width: screenWidth } = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 const calculateResponsiveSize = (baseSize, factor = 0.9) => {
 	return Math.round(baseSize * factor);
 };
 
-
 export const Container = styled(ImageBackground).attrs({
 	resizeMode: 'cover',
-	opacity: 0.4
+	opacity: 0.4,
 })`
 	flex: 1;
 	justify-content: center;
@@ -37,7 +36,7 @@ export const FormWrapper = styled.View`
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
-`
+`;
 
 export const Input = styled.TextInput`
 	padding: 15px;
@@ -72,5 +71,4 @@ export const ButtonText = styled.Text`
 	color: #000;
 	font-size: ${calculateResponsiveSize(14, screenWidth / 375)}px;
 	font-weight: bold;
-
 `;

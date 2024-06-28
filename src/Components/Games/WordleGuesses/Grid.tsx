@@ -14,9 +14,10 @@ interface Guess {
 
 interface GridProps {
 	guesses: Guess[][];
+	mini: Boolean;
 }
 
-const Grid: React.FC<GridProps> = ({guesses}) => {
+const Grid: React.FC<GridProps> = ({guesses, mini = false}) => {
 	return (
 		<GridWrapper>
 			<GridContainer>
@@ -24,9 +25,10 @@ const Grid: React.FC<GridProps> = ({guesses}) => {
 					<Row key={rowIndex}>
 						{row.map((cell, cellIndex) => (
 							<Cell
+								mini={mini}
 								key={cellIndex}
 								style={{backgroundColor: cell.color}}>
-								<Letter>{cell.letter}</Letter>
+								{!mini && <Letter>{cell.letter}</Letter>}
 							</Cell>
 						))}
 					</Row>

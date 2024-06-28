@@ -22,8 +22,6 @@ export const handleGuess = async (
 		.join('')
 		.toLowerCase();
 
-	console.log('Current Guess:', guess);
-
 	const isValid = await validateGuess(guess);
 	if (!isValid) {
 		return;
@@ -43,8 +41,6 @@ export const handleGuess = async (
 		setGuesses,
 		setLetterColors,
 	);
-
-	console.log('Updated Guesses:', newGuesses);
 
 	setGuesses(newGuesses);
 	setLetterColors(prevColors => ({...prevColors, ...newLetterColors}));
@@ -73,8 +69,6 @@ export const handleGuess = async (
 		let userGuesses = data[0]?.guess || [];
 		userGuesses[currentRow] = newGuesses[currentRow];
 
-		console.log('User Guesses to be upserted:', userGuesses);
-
 		const {error: upsertError} = await supabase.from('user_guesses').upsert(
 			{
 				user_id: userId,
@@ -88,8 +82,6 @@ export const handleGuess = async (
 		if (upsertError) {
 			throw upsertError;
 		}
-
-		console.log('Guesses upserted successfully');
 	} catch (error: any) {
 		console.error('Error saving user guesses:', error.message || error);
 	}

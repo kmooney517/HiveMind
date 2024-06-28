@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-const { width: screenWidth } = Dimensions.get('window');
+import {Dimensions} from 'react-native';
+const {width: screenWidth} = Dimensions.get('window');
 
 export const Keyboard = styled.View`
 	align-items: center;

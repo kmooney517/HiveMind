@@ -16,7 +16,6 @@ import {
 	StyledButton,
 	ButtonText,
 	CancelButton,
-	ProfileText,
 } from './StyledProfile';
 
 const Profile = ({navigation}) => {
@@ -51,7 +50,7 @@ const Profile = ({navigation}) => {
 			<ButtonRow>
 				<StyledButton
 					onPress={() => {
-						if (profile.name == '' && name == '') {
+						if (profile.name === '' && name === '') {
 							Alert.alert('You need a name!');
 						} else {
 							handleSaveProfile(

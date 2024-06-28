@@ -17,6 +17,7 @@ module.exports = {
 					'@profile': './src/Components/Profile',
 					'@wordle': './src/Components/Games/Wordle',
 					'@supabaseClient': './supabaseClient',
+					'@typeas': './src/Types',
 				},
 			},
 		],

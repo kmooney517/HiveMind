@@ -1,9 +1,13 @@
 // src/components/StyledHome.tsx
 import styled from 'styled-components/native';
-import {ImageBackground} from 'react-native';
+import {ImageBackground, SafeAreaView} from 'react-native';
+
+export const SafeAreaViewContainer = styled(SafeAreaView)`
+	flex: 1;
+`;
 
 export const Container = styled(ImageBackground).attrs({
-	resizeMode: 'cover', // Example prop to control how the image is resized
+	resizeMode: 'cover',
 	opacity: 0.1,
 })`
 	flex: 1;
@@ -30,13 +34,13 @@ export const ButtonRow = styled.View`
 	align-items: center;
 `;
 
-export const Button = styled.TouchableOpacity`
+export const Button = styled.TouchableOpacity<{backgroundColor: string}>`
 	width: 80%;
 	padding: 15px;
 	margin-bottom: 15px;
 	border-radius: 8px;
-	background-color: #ffcc00;
 	align-items: center;
+	background-color: ${({backgroundColor}) => backgroundColor};
 `;
 
 export const ButtonText = styled.Text`

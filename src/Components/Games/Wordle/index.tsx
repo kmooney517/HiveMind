@@ -27,14 +27,10 @@ const Wordle = (): React.JSX.Element => {
 	const [letterColors, setLetterColors] = useState<{[key: string]: string}>(
 		{},
 	);
-	const inputs = useRef<Array<Array<React.RefObject<any>>>>(
-		Array(6)
-			.fill(null)
-			.map(() =>
-				Array(5)
-					.fill(null)
-					.map(() => React.createRef()),
-			),
+	const inputs = useRef(
+		Array.from({length: 6}, () =>
+			Array.from({length: 5}, () => React.createRef()),
+		),
 	);
 
 	const userId = useSelector((state: RootState) => state.auth.user?.id);
@@ -48,34 +44,39 @@ const Wordle = (): React.JSX.Element => {
 				new Date().toISOString().split('T')[0],
 				userId,
 				hiveId,
-			).then(({combinedData, currentUserHasGuessed}) => {
-				if (currentUserHasGuessed) {
-					const formattedGuesses =
-						combinedData.find(guess => guess.user_id === userId)
-							?.guess || [];
-					setGuesses(formattedGuesses);
+			).then(({combinedData}) => {
+				const userGuess = combinedData.find(
+					guess => guess.user_id === userId,
+				);
+				const formattedGuesses = userGuess ? userGuess.guess : [];
+				setGuesses(formattedGuesses);
 
-					const nextEmptyRow = formattedGuesses.findIndex(row =>
-						row.every(cell => cell.letter === ''),
-					);
-					setCurrentRow(
-						nextEmptyRow !== -1
-							? nextEmptyRow
-							: formattedGuesses.length,
-					);
+				const nextEmptyRow = formattedGuesses.findIndex(row =>
+					row.every(cell => cell.letter === ''),
+				);
+				setCurrentRow(
+					nextEmptyRow !== -1
+						? nextEmptyRow
+						: formattedGuesses.length,
+				);
 
-					const _letterColors = formattedGuesses.reduce(
-						(acc, row) => {
-							row.forEach(({letter, color}) => {
-								if (letter && color !== 'white') {
-									acc[letter] = color;
-								}
-							});
-							return acc;
-						},
-						{},
-					);
-					setLetterColors(_letterColors);
+				const _letterColors = formattedGuesses.reduce((acc, row) => {
+					row.forEach(({letter, color}) => {
+						if (letter && color !== 'white') {
+							acc[letter] = color;
+						}
+					});
+					return acc;
+				}, {});
+				setLetterColors(_letterColors);
+
+				// Check if the game is complete and set the message accordingly
+				const gameCompleted =
+					formattedGuesses.some(row =>
+						row.every(cell => cell.color === 'green'),
+					) || formattedGuesses.length === 6;
+				if (gameCompleted) {
+					setMessage('Game Completed!');
 				}
 			});
 		}

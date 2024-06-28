@@ -11,7 +11,7 @@ import {
 	AuthButton,
 	ToggleAuthButton,
 	ButtonText,
-	FormWrapper
+	FormWrapper,
 } from './StyledAuth';
 
 const AuthScreen: React.FC = () => {
@@ -67,7 +67,7 @@ const AuthScreen: React.FC = () => {
 						/>
 					))}
 				</FormWrapper>
-				
+
 				<AuthButton onPress={onAuth}>
 					<ButtonText color={'#fff'}>
 						{isSignUp ? 'Sign Up' : 'Sign In'}

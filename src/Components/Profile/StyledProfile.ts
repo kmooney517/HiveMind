@@ -54,8 +54,3 @@ export const ButtonText = styled.Text`
 `;
 
 export const CancelButton = styled.Button``;
-
-export const ProfileText = styled.Text`
-	font-size: 18px;
-	margin-top: 16px;
-`;
