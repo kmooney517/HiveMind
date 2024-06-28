@@ -11,6 +11,7 @@ import {
 	AuthButton,
 	ToggleAuthButton,
 	ButtonText,
+	FormWrapper
 } from './StyledAuth';
 
 const AuthScreen: React.FC = () => {
@@ -52,18 +53,21 @@ const AuthScreen: React.FC = () => {
 		<Container source={require('./background.png')}>
 			<Wrapper>
 				<Title>HiveMind</Title>
-				{formFields.map((inputProps, index) => (
-					<Input
-						key={index}
-						placeholder={inputProps.placeholder}
-						value={inputProps.value}
-						onChangeText={inputProps.onChangeText}
-						keyboardType={inputProps.keyboardType}
-						autoCapitalize={inputProps.autoCapitalize}
-						placeholderTextColor="#888"
-						secureTextEntry={inputProps.secureTextEntry}
-					/>
-				))}
+				<FormWrapper>
+					{formFields.map((inputProps, index) => (
+						<Input
+							key={index}
+							placeholder={inputProps.placeholder}
+							value={inputProps.value}
+							onChangeText={inputProps.onChangeText}
+							keyboardType={inputProps.keyboardType}
+							autoCapitalize={inputProps.autoCapitalize}
+							placeholderTextColor="#888"
+							secureTextEntry={inputProps.secureTextEntry}
+						/>
+					))}
+				</FormWrapper>
+				
 				<AuthButton onPress={onAuth}>
 					<ButtonText color={'#fff'}>
 						{isSignUp ? 'Sign Up' : 'Sign In'}
