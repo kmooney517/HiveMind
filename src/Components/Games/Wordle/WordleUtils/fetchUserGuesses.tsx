@@ -31,6 +31,8 @@ export const fetchUserGuesses = async (selectedDate, currentUser, hiveId) => {
 			throw guessesError;
 		}
 
+		console.log('guessesData', guessesData);
+
 		const combinedData = guessesData.map(guess => {
 			const formattedGuesses = guess.guess.map(row => {
 				if (Array.isArray(row)) {

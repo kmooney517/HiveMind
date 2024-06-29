@@ -10,9 +10,10 @@ export const Container = styled(ImageBackground).attrs({
 	resizeMode: 'cover',
 	opacity: 0.1,
 })`
-	flex: 1;
-	justify-content: center;
-	align-items: center;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-direction: row;
+	gap: 10px;
 	padding: 20px;
 `;
 
@@ -29,13 +30,8 @@ export const WelcomeText = styled.Text`
 	margin-bottom: 20px;
 `;
 
-export const ButtonRow = styled.View`
-	width: 100%;
-	align-items: center;
-`;
-
 export const Button = styled.TouchableOpacity<{backgroundColor: string}>`
-	width: 80%;
+	flex: 1;
 	padding: 15px;
 	margin-bottom: 15px;
 	border-radius: 8px;

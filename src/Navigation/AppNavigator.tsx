@@ -3,7 +3,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import AuthScreen from '@auth/AuthScreen';
 import Wordle from '@wordle';
-import WordleGuesses from '@games/WordleGuesses';
 import HomeScreen from '@home/HomeScreen';
 import {useSelector} from 'react-redux';
 import HiveView from '@hive/HiveView';
@@ -21,7 +20,7 @@ const AppNavigator = (): React.JSX.Element => {
 				screenOptions={{
 					animation: 'none',
 					headerStyle: {
-						backgroundColor: '#b0c4de', // Set your desired header color here
+						backgroundColor: '#b0c4de',
 					},
 				}}>
 				{user ? (
@@ -32,11 +31,6 @@ const AppNavigator = (): React.JSX.Element => {
 							component={HomeScreen}
 						/>
 						<Stack.Screen name="Wordle" component={Wordle} />
-						<Stack.Screen
-							options={{headerShown: false}}
-							name="WordleGuesses"
-							component={WordleGuesses}
-						/>
 						<Stack.Screen
 							name="HiveView"
 							component={HiveView}

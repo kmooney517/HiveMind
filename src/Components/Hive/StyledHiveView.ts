@@ -1,18 +1,22 @@
-// src/components/StyledHiveView.tsx
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	flex: 1;
 	padding: 20px;
-	background-color: #f0f0f0;
+	background-color: #f0f4f8;
 `;
 
-export const TopView = styled.View`
-	display: flex;
+export const HiveMembersTitle = styled.Text`
+	font-size: 20px;
+	font-weight: bold;
 	margin-bottom: 10px;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
+`;
+
+export const MemberItem = styled.TouchableOpacity<{borderColor: string}>`
+	border-width: 2px;
+	border-color: ${({borderColor}) => borderColor};
+	padding: 10px;
+	margin-bottom: 10px;
 `;
 
 export const MemberView = styled.View`
@@ -26,6 +30,10 @@ export const MemberDetails = styled.View`
 	align-items: flex-start;
 `;
 
+export const MemberText = styled.Text`
+	font-size: 16px;
+`;
+
 export const CompletedView = styled.View`
 	flex: 1;
 	align-items: flex-end;
@@ -36,17 +44,10 @@ export const CurrentlyLosingText = styled.Text`
 `;
 
 export const PendingText = styled.Text`
-	flex: 1;
-`;
-
-export const HiveMembersTitle = styled.Text`
-	font-size: 24px;
-	font-weight: bold;
-	color: #333;
+	color: gray;
 `;
 
 export const Input = styled.TextInput`
-	width: 100%;
 	padding: 15px;
 	margin-bottom: 20px;
 	border-radius: 8px;
@@ -54,39 +55,33 @@ export const Input = styled.TextInput`
 	border-color: #dcdcdc;
 	background-color: #fff;
 	font-size: 16px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const JoinButton = styled.Button`
-	width: 100%;
-	padding: 15px;
-	margin-top: 10px;
-	border-radius: 8px;
-	background-color: #4b9ce2;
-	align-items: center;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-export const LeaveButton = styled.Button`
-	width: 100%;
-	padding: 15px;
-	margin-top: 10px;
-	border-radius: 8px;
-	background-color: #ff0000;
-	align-items: center;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-export const MemberItem = styled.View`
-	border-width: 2px;
+	background-color: #007aff;
 	padding: 10px;
-	margin-bottom: 10px;
-	border-color: ${props => props.borderColor};
+	border-radius: 8px;
+	color: #fff;
 `;
 
-export const MemberText = styled.Text`
-	font-size: 16px;
-	color: #333;
+export const ModalContainer = styled.View`
+	flex: 1;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export const BackButton = styled.TouchableOpacity``;
+export const ModalContent = styled.View`
+	background-color: #fff;
+	border-radius: 10px;
+	align-items: center;
+	justify-content: center;
+	padding: 25px;
+`;
+
+export const CloseButton = styled.Button`
+	background-color: #ff0000;
+	padding: 10px;
+	border-radius: 8px;
+	color: #fff;
+`;

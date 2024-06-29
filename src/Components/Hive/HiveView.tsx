@@ -1,34 +1,26 @@
+// src/components/HiveView.tsx
 import React, {useState, useEffect} from 'react';
 import {ScrollView} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '@redux/store';
 import {
-	fetchMembers,
+	fetchHiveMembers,
 	handleJoinHive,
 	handleLeaveHive,
 	determineWorstPlayer,
-} from './hiveHelpers';
-import Grid from '../Games/WordleGuesses/Grid';
-import {
-	Container,
-	Input,
-	JoinButton,
-	LeaveButton,
-	HiveMembersTitle,
-	MemberItem,
-	MemberText,
-	TopView,
-	MemberView,
-	MemberDetails,
-	CompletedView,
-	CurrentlyLosingText,
-	PendingText,
-	BackButton,
-} from './StyledHiveView';
+	sortHiveMembers,
+	getBorderColor,
+} from './hiveUtils';
+import {Container, Input, JoinButton} from './StyledHiveView';
+import {HiveHeader} from './HiveHeader';
+import HiveMemberRow from './HiveMemberRow';
+import HiveMemberModal from './HiveMemberModal';
 
 const HiveView: React.FC = ({navigation}) => {
 	const [hiveName, setHiveName] = useState<string>('');
 	const [hiveMembers, setHiveMembers] = useState<any[]>([]);
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [selectedMember, setSelectedMember] = useState<any>(null);
 	const userId = useSelector((state: RootState) => state.auth.user?.id);
 	const hiveId = useSelector((state: RootState) => state.hive.id);
 	const hiveNameState = useSelector((state: RootState) => state.hive.name);
@@ -36,72 +28,51 @@ const HiveView: React.FC = ({navigation}) => {
 
 	useEffect(() => {
 		if (hiveId) {
-			fetchMembers(hiveId, setHiveMembers);
+			fetchHiveMembers(hiveId, setHiveMembers);
 		}
 	}, [hiveId]);
 
 	const worstPlayer = determineWorstPlayer(hiveMembers);
 	const allCompleted = hiveMembers.every(member => member.completedToday);
+	const sortedMembers = sortHiveMembers(hiveMembers, worstPlayer);
+
+	const handleMemberPress = member => {
+		setSelectedMember(member);
+		setModalVisible(true);
+	};
 
 	return (
 		<Container>
 			{hiveId ? (
 				<>
-					<TopView>
-						<BackButton onPress={() => navigation.navigate('Home')}>
-							<HiveMembersTitle>
-								← {hiveNameState}
-							</HiveMembersTitle>
-						</BackButton>
-						<LeaveButton
-							title="Leave Hive"
-							onPress={() =>
-								handleLeaveHive(
-									userId,
-									dispatch,
-									setHiveMembers,
-								)
-							}
-						/>
-					</TopView>
+					<HiveHeader
+						navigation={navigation}
+						hiveName={hiveNameState}
+						handleLeave={() =>
+							handleLeaveHive(userId, dispatch, setHiveMembers)
+						}
+					/>
 					<ScrollView>
-						{hiveMembers.map(member => (
-							<MemberItem
+						{sortedMembers.map(member => (
+							<HiveMemberRow
 								key={member.user_id}
-								borderColor={
-									member.user_id === worstPlayer?.user_id &&
-									allCompleted
-										? 'red'
-										: member.completedToday
-										? 'green'
-										: 'yellow'
-								}>
-								<MemberView>
-									<MemberDetails>
-										<MemberText>{member.name}</MemberText>
-										{member.user_id ===
-											worstPlayer?.user_id && (
-											<CurrentlyLosingText>
-												{allCompleted
-													? 'LOST'
-													: 'Currently losing'}
-											</CurrentlyLosingText>
-										)}
-									</MemberDetails>
-									{member.completedToday ? (
-										<CompletedView>
-											<Grid
-												mini={true}
-												guesses={member.guessData}
-											/>
-										</CompletedView>
-									) : (
-										<PendingText>Today pending</PendingText>
-									)}
-								</MemberView>
-							</MemberItem>
+								member={member}
+								borderColor={getBorderColor(
+									member,
+									worstPlayer,
+									allCompleted,
+								)}
+								onPress={() => handleMemberPress(member)}
+								worstPlayer={worstPlayer}
+								allCompleted={allCompleted}
+							/>
 						))}
 					</ScrollView>
+					<HiveMemberModal
+						modalVisible={modalVisible}
+						setModalVisible={setModalVisible}
+						selectedMember={selectedMember}
+					/>
 				</>
 			) : (
 				<>

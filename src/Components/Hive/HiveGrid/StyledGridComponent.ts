@@ -1,10 +1,6 @@
 import styled from 'styled-components/native';
 
-export const GridWrapper = styled.View`
-	margin-bottom: 20px;
-	margin-right: 20px;
-	align-items: center;
-`;
+export const GridWrapper = styled.View``;
 
 export const UserEmail = styled.Text`
 	font-size: 16px;
