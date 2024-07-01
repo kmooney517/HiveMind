@@ -85,3 +85,21 @@ export const CloseButton = styled.Button`
 	border-radius: 8px;
 	color: #fff;
 `;
+
+export const StarterWordInput = styled.TextInput`
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	margin: 10px 0;
+	border-width: 1px;
+	border-radius: 8px;
+	font-size: 18px;
+`;
+
+export const StarterWordButton = styled.Button`
+	padding: 10px;
+	background-color: #007aff;
+	border-radius: 8px;
+	color: #fff;
+`;

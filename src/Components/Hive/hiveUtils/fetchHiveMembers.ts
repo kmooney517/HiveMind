@@ -4,17 +4,15 @@ import {Alert} from 'react-native';
 export const fetchHiveMembers = async (
 	hiveId: string,
 	setHiveMembers: (members: any[]) => void,
+	updateStarterWordState: (
+		starterWord: string | null,
+		date: string | null,
+	) => void,
 ) => {
 	const supabase = getSupabaseClient();
 	try {
 		const members = await fetchMembers(hiveId);
-		const today = new Date();
-		const localeDateString = today.toLocaleDateString('en-CA', {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			timeZone: 'America/New_York', // Replace with appropriate timezone
-		});
+		const today = new Date().toLocaleDateString('en-CA');
 
 		const membersWithStatus = await Promise.all(
 			members.map(async member => {
@@ -22,27 +20,41 @@ export const fetchHiveMembers = async (
 					.from('user_guesses')
 					.select('guess')
 					.eq('user_id', member.user_id)
-					.eq('date', localeDateString)
+					.eq('date', today)
 					.single();
 
 				let completedToday = false;
-				let guessesTaken = 0;
 				if (guessData) {
 					const lastGuess =
 						guessData.guess[guessData.guess.length - 1];
 					completedToday =
 						lastGuess &&
 						lastGuess.every(cell => cell.color === 'green');
-					guessesTaken = guessData.guess.length;
 				}
 
 				return {
 					...member,
 					completedToday,
 					guessData: guessData ? guessData.guess : [],
-					guessesTaken: guessesTaken,
+					guessesTaken: guessData ? guessData.guess.length : 0,
 				};
 			}),
+		);
+
+		const {data: starterWordData, error: starterWordError} = await supabase
+			.from('starter_words')
+			.select('starter_word, date')
+			.eq('hive_id', hiveId)
+			.single();
+
+		if (starterWordError) {
+			console.error('Error fetching starter word:', starterWordError);
+			throw starterWordError;
+		}
+
+		updateStarterWordState(
+			starterWordData?.starter_word || null,
+			starterWordData?.date || null,
 		);
 
 		setHiveMembers(membersWithStatus);

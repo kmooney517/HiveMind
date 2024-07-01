@@ -3,7 +3,7 @@ import {getSupabaseClient} from '@supabaseClient';
 
 import {setHive} from '@redux/hiveSlice';
 import {Dispatch} from 'redux';
-import {fetchMembers} from './fetchMembers';
+import {fetchHiveMembers} from './fetchHiveMembers';
 import {Alert} from 'react-native';
 
 export const handleJoinHive = async (
@@ -56,7 +56,7 @@ export const handleJoinHive = async (
 		}
 
 		dispatch(setHive({id: hiveIdToUse, name: hiveNameFetched}));
-		await fetchMembers(hiveIdToUse, setHiveMembers);
+		await fetchHiveMembers(hiveIdToUse, setHiveMembers);
 		Alert.alert('Successfully joined the hive!');
 		setHiveName(hiveNameFetched);
 	} catch (error: any) {

@@ -5,3 +5,6 @@ export * from './determineWorstPlayer';
 export * from './calculateAdvantage';
 export * from './sortHiveMembers';
 export * from './getBorderColor';
+export * from './fetchStarterWord';
+export * from './setStarterWord';
+export * from './checkIfWordValid';

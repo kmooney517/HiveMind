@@ -40,7 +40,7 @@ export const Button = styled.TouchableOpacity<{backgroundColor: string}>`
 `;
 
 export const ButtonText = styled.Text`
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: bold;
 	color: #fff;
 `;

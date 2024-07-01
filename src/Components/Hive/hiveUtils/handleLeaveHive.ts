@@ -1,4 +1,6 @@
 import {Alert} from 'react-native';
+import {getSupabaseClient} from '@supabaseClient';
+import {clearHive} from '@redux/hiveSlice';
 
 export const handleLeaveHive = async (
 	userId: string,
@@ -17,6 +19,7 @@ export const handleLeaveHive = async (
 };
 
 const leaveHive = async (userId: string) => {
+	const supabase = getSupabaseClient();
 	try {
 		const {error} = await supabase
 			.from('hive_memberships')

@@ -8,11 +8,19 @@ export const handleInputChange = (
 	>,
 	inputs: React.MutableRefObject<Array<Array<React.RefObject<any>>>>,
 ) => {
-	const newGuesses = [...guesses];
-	newGuesses[row][col] = {
-		letter: value.slice(-1).toUpperCase(),
-		color: 'white',
-	};
+	const newGuesses = guesses.map((rowGuess, rowIndex) =>
+		rowGuess.map((cell, colIndex) => {
+			if (rowIndex === row && colIndex === col) {
+				return {
+					...cell,
+					letter: value.slice(-1).toUpperCase(),
+					color: 'white',
+				};
+			}
+			return cell;
+		}),
+	);
+
 	setGuesses(newGuesses);
 
 	// Focus logic

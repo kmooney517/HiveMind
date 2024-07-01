@@ -31,7 +31,18 @@ export const fetchUserGuesses = async (selectedDate, currentUser, hiveId) => {
 			throw guessesError;
 		}
 
-		console.log('guessesData', guessesData);
+		// Fetch the starter word for the hive and the current date
+		const {data: starterWordData, error: starterWordError} = await supabase
+			.from('starter_words')
+			.select('starter_word')
+			.eq('hive_id', hiveId)
+			.eq('date', selectedDate);
+
+		if (starterWordError) {
+			throw starterWordError;
+		}
+
+		const starterWord = starterWordData?.[0]?.starter_word || null;
 
 		const combinedData = guessesData.map(guess => {
 			const formattedGuesses = guess.guess.map(row => {
@@ -69,9 +80,7 @@ export const fetchUserGuesses = async (selectedDate, currentUser, hiveId) => {
 			return {
 				...guess,
 				guess: formattedGuesses,
-				guessesTaken: formattedGuesses.filter(row =>
-					row.some(cell => cell.letter !== ''),
-				).length,
+				guessesTaken: rowsWithGuesses.length,
 				name: member?.name || guess.user_id,
 				completedToday,
 			};
@@ -85,15 +94,26 @@ export const fetchUserGuesses = async (selectedDate, currentUser, hiveId) => {
 						guess => guess.user_id === member.user_id,
 					),
 			)
-			.map(member => ({
-				user_id: member.user_id,
-				guess: Array(6).fill(
+			.map(member => {
+				const initialGuesses = Array(6).fill(
 					Array(5).fill({letter: '', color: 'white'}),
-				),
-				guessesTaken: 0,
-				name: member.name,
-				completedToday: false,
-			}));
+				);
+
+				// If a starter word is set, make it the first guess
+				if (starterWord) {
+					initialGuesses[0] = starterWord
+						.split('')
+						.map(letter => ({letter, color: 'white'}));
+				}
+
+				return {
+					user_id: member.user_id,
+					guess: initialGuesses,
+					guessesTaken: starterWord ? 1 : 0,
+					name: member.name,
+					completedToday: false,
+				};
+			});
 
 		const finalData = [...combinedData, ...notStartedMembers];
 

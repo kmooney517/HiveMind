@@ -63,7 +63,7 @@ const HomeScreen = ({navigation}) => {
 					disabled={!profile.id}
 					backgroundColor={!profile.id ? '#B0C4DE' : '#007AFF'}>
 					<ButtonText>
-						{hive.id ? hive.name : 'Join or Create Hive'}
+						{hive.id ? hive.name : 'Join/Create Hive'}
 					</ButtonText>
 				</Button>
 			</Container>
